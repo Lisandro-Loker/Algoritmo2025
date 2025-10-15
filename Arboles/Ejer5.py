@@ -65,15 +65,22 @@ class BinaryTree:
             if root is not None:
                 if root.value == value:
                     return root
-                elif root.value > value:
-                    return __search(root.left, value)
-                else:
-                    return __search(root.right, value)
+            elif root.value > value:
+                return __search(root.left, value)
+            else:
+                return __search(root.right, value)       
 
         aux = None
         if self.root is not None:
             aux = __search(self.root, value)
         return aux
+    
+    def proximity_search(self, value: Any) -> __nodeTree:
+        def __search(root, value):
+            if root is not None:
+                if root.value.startswith(value):
+                    print(root.value)
+
 
     def delete(self, value: Any):
         def __replace(root):
@@ -138,66 +145,69 @@ class BinaryTree:
             altura = max (alt_left, alt_right) + 1
             root.altura = altura
 
+    def villain_in_order(self):
+      def __villain_in_order(root):
+            if root is not None:
+                __villain_in_order(root.left)
+                if root.other_values["is_villain"] is True:
+                    print(root.value)
+                __villain_in_order(root.right)
 
-#    def villain_in_order(self):
-#       def __villain_in_order(root):
-#            if root is not None:
-#                __villain_in_order(root.left)
-#                if root.other_values["is_villain"] is True:
-#                    print(root.value)
-#                __villain_in_order(root.right)
-#
-#        if self.root is not None:
-#            __villain_in_order(self.root)
+            if self.root is not None:
+                __villain_in_order(self.root)
 
+    def count_heroes(self):
+        def __count_heroes(root):
+            count = 0
+            if root is not None:
+                if root.other_values["is_villain"] is False:
+                    count += 1
+                count += __count_heroes(root.left)
+                count += __count_heroes(root.right)
+            return count
+    
+    def divide_tree (self, arbol_h, arbol_v):
+        def __divide_tree(root, arbol_h, arbol_v):
+            if root is not None:
+                if root.other_values["is_villain"] is False:
+                    arbol_h.insert(root.value, root.other_values)
+                else:
+                    arbol_v.insert(root.value,root.other_values)
+                __divide_tree(root.left, arbol_h, arbol_v)
+                __divide_tree(root.right, arbol_h, arbol_v)
+        __divide_tree(self.root, arbol_h, arbol_v)    
+
+from super_heroes_data import superheroes
 
 arbol = BinaryTree()
+arbol_heroes = BinaryTree()
+arbol_villanos = BinaryTree()
 
-arbol.insert('L', 'f')
-arbol.insert('D', 'b')
-arbol.insert('B', 'k')
-arbol.insert('E', 'e')
-arbol.insert('H', 'h')
-arbol.insert('J', 'j')
-arbol.insert('R', 'r')
-arbol.insert('I', 'i')
-arbol.insert('A', 'a')
+for super_hero in superheroes:
+    arbol.insert(super_hero['name'], super_hero)
 
-# pos = arbol.search('F')
-# if pos is not None:
-#     arbol.delete('F')
-#     arbol.insert('C', 'c')
+arbol.divide_tree(arbol_heroes, arbol_villanos)
 
-# delete_value, deleter_other_values = arbol.delete('K')
-# if delete_value is not None:
-#    print(delete_value, deleter_other_values)
+bosque = [arbol_heroes, arbol_villanos]
 
+for tree in bosque:
+    tree.in_order()
+    print()
 
-# arbol.in_order()
-# # delete_value = arbol.delete('F')
+arbol.villain_in_order()
 
-# # if delete_value is not None:
-# #     print(f'valor eliminado {delete_value}')
-# # else:
-# #     print('valor no encontrado')
-# # print()
-# arbol.by_level()
+arbol.proximity_search("Dr")
+name = input ("ingrese nombre para modificar: ")
+value, other_value = arbol.delete(name)
 
+if value is not None:
+    fix_name = input ("ingrese el nuevo nombre: ")
+    other_value["Name"] = fix_name
+    arbol.insert(fix_name, other_value)
 
-# # arbol.insert(11)
+print()
+arbol.proximity_search("Dr")
+print()
+pos = arbol.search("Dr Strange")
 
-# # pos = arbol.search(19)
-# # print(pos)
-# arbol.in_order()
-
-# from super_heroes_data import superheroes
-
-# for super_hero in superheroes:
-#     arbol.insert(super_hero['name'], super_hero)
-
-# arbol.villain_in_order()
-
-# print()
-# pos = arbol.search("Thanos")
-# if pos is not None:
-#     print(pos.value, pos.other_values)
+print(arbol.count_heroes())
