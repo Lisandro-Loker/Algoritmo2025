@@ -51,6 +51,30 @@ class BinaryTree:
         if self.root is not None:
             __in_order(self.root)
 
+    def in_order_conteo(self):
+        def __in_order_conteo_tipos(root):
+            if root is not None:
+                __in_order_conteo_tipos(root.left)
+                
+                tipo = root.value
+                lista_de_pokemon = root.other_values 
+                conteo = len(lista_de_pokemon)
+                
+                print(f"\n## Tipo: {tipo}")
+                
+                nombres = [p['nombre'] for p in lista_de_pokemon]
+                
+                for nombre in nombres:
+                    print(f"  - {nombre}")
+                
+                print(f"Total de Pokémon de Tipo '{tipo}': {conteo} ---")
+                
+                __in_order_conteo_tipos(root.right)
+
+        if self.root is not None:
+            __in_order_conteo_tipos(self.root)
+    
+
     def post_order(self):
         def __post_order(root):
             if root is not None:
@@ -80,6 +104,22 @@ class BinaryTree:
         def __search(root, value, aux):
             if root is not None:
                 if root.value.startswith(value):
+                    aux.append(root)
+                # elif root.value > value:
+                __search(root.left, value, aux)
+                # else:
+                __search(root.right, value, aux)
+
+        aux = None
+        if self.root is not None:
+            aux = []
+            __search(self.root, value, aux)
+        return aux
+
+    def proximity_search_nombre(self, value: Any) -> __nodeTree:
+        def __search(root, value, aux):
+            if root is not None:
+                if value in root.value:
                     aux.append(root)
                 # elif root.value > value:
                 __search(root.left, value, aux)

@@ -57,6 +57,7 @@ print("Fin punto D \n")
 #E- Dr Strange esta mal cargado. Utilizar una busqueda por proximidad para enccontrarlo en el arbol y modificar su nombre.
 def modificar_dr_strange(self, nombre_incorrecto, nombre_correcto):
     searched = self.proximity_search("Dr")
+    print('**********',searched)
     if searched is not None:
         for search in searched:
             if search.value == nombre_incorrecto:
