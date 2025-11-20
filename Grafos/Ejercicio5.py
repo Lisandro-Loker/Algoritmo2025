@@ -1,5 +1,4 @@
 from graph import Graph
-import math
 
 g = Graph(is_directed=False)
 
@@ -79,9 +78,10 @@ print("\nFin Ejercicio B.")
 
 print ("\nEjercicio C.")
 
-pcs = ["Manjaro", "Red Hat", "Fedora"]
-for pc in pcs:
-    path = g.dijkstra(pc)
+computadoras = ["Manjaro", "Red Hat", "Fedora"]
+
+for computadora in computadoras:
+    path = g.dijkstra(computadora)
     destination = 'Impresora'
     peso_total = None
     camino_completo = []
@@ -95,11 +95,87 @@ for pc in pcs:
             destination = value[2]
     camino_completo.reverse()
 
-    if peso_total is not None and peso_total is not math.inf:
-        print(f'Camino desde {pc}: {" -> ".join(camino_completo)} (Costo: {peso_total})')
+    if peso_total is not None:
+        print(f'El camino desde {computadora} realiza los siguientes pasos [{" --> ".join(camino_completo)}] (Tuvo un costo de: {peso_total})')
     else:
-        print(f'No se encontró camino desde {pc} a la Impresora.')
+        print(f'No hay un camino desde {computadora} a la Impresora.')
 
 print("\nFin Ejercicio C.")
 
-#-D Encontrar el árbol de expansión mínima.
+#D- Encontrar el árbol de expansión mínima.
+
+expansion_minima = g.kruskal('Impresora')
+
+print ("\nEjercicio D.")
+print("Árbol de Expansión Mínima utilizando Kruskal.")
+print(expansion_minima)
+print("\nFin Ejercicio D.")
+
+#E- Determinar desde que pc (no notebook) es el camino más corto hasta el servidor “Guaraní”.
+
+print ("\nEjercicio E.")
+
+computadoras = ["Ubuntu", "Mint", "Manjaro", "Parrot", "Fedora"]
+
+for computadora in computadoras:
+    path = g.dijkstra(computadora)
+    destination = 'Guaraní'
+    peso_total = None
+    camino_completo = []
+    
+    while path.size() > 0:
+        value = path.pop()
+        if value[0] == destination:
+            if peso_total is None:
+                peso_total = value[1]
+            camino_completo.append(value[0])
+            destination = value[2]
+    camino_completo.reverse()
+
+    if peso_total is not None:
+        print(f'El camino desde {computadora} realiza los siguientes pasos [{" --> ".join(camino_completo)}] (Tuvo un costo de: {peso_total})')
+    else:
+        print(f'No hay un camino desde {computadora} al Guaraní.')
+
+print("\nFin Ejercicio E.")
+
+#F- Indicar desde que computadora del switch 01 es el camino más corto al servidor “MongoDB”.
+
+print("\nEjercicio F.")
+
+computadoras = ["Ubuntu", "Mint", "Debian"]
+
+for computadora in computadoras:
+    path = g.dijkstra(computadora)
+    destination = 'MongoDB'
+    peso_total = None
+    camino_completo = []
+    
+    while path.size() > 0:
+        value = path.pop()
+        if value[0] == destination:
+            if peso_total is None:
+                peso_total = value[1]
+            camino_completo.append(value[0])
+            destination = value[2]
+    camino_completo.reverse()
+
+    if peso_total is not None:
+        print(f'El camino desde {computadora} realiza los siguientes pasos [{" --> ".join(camino_completo)}] (Tuvo un costo de: {peso_total})')
+    else:
+        print(f'No hay un camino desde {computadora} al MongoDB.')
+
+print("\nFin Ejercicio F.")
+
+#G- Cambiar la conexión de la impresora al router 02 y vuelva a resolver el punto b.
+
+print("\nEjercicio G.")
+g.delete_edge('Impresora', 'Switch 1')
+g.insert_edge('Impresora', 'Router 2', 22)
+
+print("Se elimino la anterior conexión de la impresora y se conectó al Router 02.")
+print("\nVolvemos a realizar el punto B.")
+for notebook in notebooks_a_probar:
+    ejecutar_barridos(notebook)
+
+print("\nFin Ejercicio G.")
